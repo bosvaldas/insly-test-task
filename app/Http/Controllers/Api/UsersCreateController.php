@@ -8,11 +8,10 @@ use App\Http\Requests\UsersCreateRequest;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
-class UsersController
+class UsersCreateController
 {
-    public function create(UsersCreateRequest $request): JsonResponse
+    public function __invoke(UsersCreateRequest $request): JsonResponse
     {
         $user = new User();
         $user->email = $request->input('email');

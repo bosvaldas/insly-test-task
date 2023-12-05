@@ -7,12 +7,11 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class UsersControllerTest extends TestCase
+class UsersCreateControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function create_withoutOptionalFields_createsAndReturnsUser(): void
+    public function test_createsAndReturnsUser_withoutOptionalFields(): void
     {
         // Arrange
         $data = [
@@ -45,8 +44,7 @@ class UsersControllerTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function create_withAllFields_createsAndReturnsUser(): void
+    public function test_createsAndReturnsUser_withAllFields(): void
     {
         // Arrange
         $data = [
@@ -90,10 +88,8 @@ class UsersControllerTest extends TestCase
 
     /**
      * @dataProvider failingValidationDataProvider
-     *
-     * @test
      */
-    public function create_failsValidation(array $data): void
+    public function test_failsValidation(array $data): void
     {
         // Act
         $response = $this->postJson('/api/users', $data);
