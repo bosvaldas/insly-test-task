@@ -4,40 +4,25 @@ declare(strict_types=1);
 
 namespace App\Module\Users\Communication\Controller;
 
-use App\Models\User;
-use App\Models\UserDetail;
-use App\Module\Users\Communication\Request\UsersCreateRequest;
+use App\Module\Users\Business\Writer\UsersWriterInterface;
+use App\Module\Users\Communication\Request\UsersUpdateRequest;
 use Illuminate\Http\JsonResponse;
 
 class UsersUpdateController
 {
-    public function __invoke(int $id, UsersCreateRequest $request): JsonResponse
+    public function __construct(
+        private readonly UsersWriterInterface $usersWriter,
+    ) {
+    }
+
+    public function __invoke(UsersUpdateRequest $request): JsonResponse
     {
-        $user = User::query()->findOrFail($id);
-        assert($user instanceof User);
+        $input = $request->toInput();
 
-        $user->email = $request->input('email');
-        $user->password = bcrypt($request->input('email'));
-        $user->first_name = $request->input('first_name');
-        $user->last_name = $request->input('last_name');
-        $user->save();
-
-        $address = $request->input('address');
-        if ($address) {
-            $userDetail = UserDetail::query()
-                ->where('user_id', '=', $user->id)
-                ->firstOrNew();
-            $userDetail->user_id = $user->id;
-            $userDetail->address = $address;
-            $userDetail->save();
-        } else {
-            $userDetail = UserDetail::query()
-                ->where('user_id', '=', $user->id)
-                ->delete();
-        }
+        $user = $this->usersWriter->update($input);
 
         $data = $user->toArray();
-        $data['address'] = $userDetail->address ?? null;
+        $data['address'] = $user->userDetail->address ?? null;
 
         return new JsonResponse($data, JsonResponse::HTTP_OK);
     }

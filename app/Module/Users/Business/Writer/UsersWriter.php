@@ -6,6 +6,7 @@ namespace App\Module\Users\Business\Writer;
 
 use App\Models\User;
 use App\Module\Users\Communication\Input\UsersCreateInput;
+use App\Module\Users\Communication\Input\UsersUpdateInput;
 use App\Module\Users\Persistence\UserDetailsEntityManager\UserDetailsEntityManagerInterface;
 use App\Module\Users\Persistence\UsersEntityManager\UsersEntityManagerInterface;
 
@@ -23,6 +24,19 @@ class UsersWriter implements UsersWriterInterface
 
         if ($input->address) {
             $this->userDetailsEntityManager->create($input, $user);
+        }
+
+        return $user;
+    }
+
+    public function update(UsersUpdateInput $input): User
+    {
+        $user = $this->usersEntityManager->update($input);
+
+        if ($input->address) {
+            $this->userDetailsEntityManager->update($input, $user);
+        } else {
+            $this->userDetailsEntityManager->deleteByUser($user);
         }
 
         return $user;
