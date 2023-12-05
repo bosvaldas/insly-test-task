@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api;
+namespace App\Module\Users\Communication\Controller;
 
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
