@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\UserDetail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,17 @@ class UsersController
         $user->last_name = $request->input('last_name');
         $user->save();
 
-        return new JsonResponse($user, JsonResponse::HTTP_CREATED);
+        $address = $request->input('address');
+        if ($address) {
+            $userDetail = new UserDetail();
+            $userDetail->user_id = $user->id;
+            $userDetail->address = $address;
+            $userDetail->save();
+        }
+
+        $data = $user->toArray();
+        $data['address'] = $userDetail->address ?? null;
+
+        return new JsonResponse($data, JsonResponse::HTTP_CREATED);
     }
 }
