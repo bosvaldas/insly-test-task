@@ -31,8 +31,8 @@ class UsersCreateControllerTest extends TestCase
         $this->assertArrayNotHasKey('password', $responseJson);
         $this->assertNotNull($responseJson['id']);
         $this->assertSame('foo@bar.baz', $responseJson['email']);
-        $this->assertSame('John', $responseJson['first_name']);
-        $this->assertSame('Doe', $responseJson['last_name']);
+        $this->assertSame('John', $responseJson['firstName']);
+        $this->assertSame('Doe', $responseJson['lastName']);
         $this->assertNull($responseJson['address']);
 
         // Assert - user is saved to the database
@@ -65,8 +65,8 @@ class UsersCreateControllerTest extends TestCase
         $this->assertArrayNotHasKey('password', $responseJson);
         $this->assertNotNull($responseJson['id']);
         $this->assertSame('bob@doe.test', $responseJson['email']);
-        $this->assertSame('BOB', $responseJson['first_name']);
-        $this->assertSame('Doe', $responseJson['last_name']);
+        $this->assertSame('BOB', $responseJson['firstName']);
+        $this->assertSame('Doe', $responseJson['lastName']);
 
         // Assert - user details are in the response
         $this->assertSame('Testing st. 14, Vilnius, Lithuania', $responseJson['address']);

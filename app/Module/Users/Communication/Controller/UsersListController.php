@@ -6,6 +6,7 @@ namespace App\Module\Users\Communication\Controller;
 
 use App\Models\User;
 use App\Module\Users\Business\Reader\UsersReaderInterface;
+use App\Module\Users\Communication\Output\UsersOutput;
 use Illuminate\Http\JsonResponse;
 
 class UsersListController
@@ -19,12 +20,7 @@ class UsersListController
     {
         $users = $this->usersReader
             ->list()
-            ->map(function (User $user): array {
-                $data = $user->toArray();
-                $data['address'] = $user->userDetail->address ?? null;
-
-                return $data;
-            });
+            ->map(fn (User $user) => UsersOutput::fromUser($user));
 
         return new JsonResponse($users);
     }
