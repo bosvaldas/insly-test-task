@@ -15,5 +15,5 @@ interface UserDetailsEntityManagerInterface
 
     public function update(UsersUpdateInput $input, User $user): UserDetail;
 
-    public function deleteByUser(User $user): void;
+    public function deleteByUserId(int $userId): void;
 }

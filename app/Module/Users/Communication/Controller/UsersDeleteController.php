@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace App\Module\Users\Communication\Controller;
 
-use App\Models\User;
+use App\Module\Users\Business\Writer\UsersWriterInterface;
+use App\Module\Users\Communication\Request\UsersDeleteRequest;
 use Illuminate\Http\JsonResponse;
 
 class UsersDeleteController
 {
-    public function __invoke(int $id): JsonResponse
+    public function __construct(
+        private readonly UsersWriterInterface $usersWriter,
+    ) {
+    }
+
+    public function __invoke(UsersDeleteRequest $request): JsonResponse
     {
-        $user = User::query()->findOrFail($id);
-        assert($user instanceof User);
-
-        if ($user->userDetail) {
-            $user->userDetail->delete();
-        }
-
-        $user->delete();
+        $input = $request->toInput();
+        $this->usersWriter->delete($input);
 
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
     }

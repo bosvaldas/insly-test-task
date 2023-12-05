@@ -12,5 +12,7 @@ interface UsersEntityManagerInterface
 {
     public function create(UsersCreateInput $input): User;
 
-    public function update(UsersUpdateInput $input);
+    public function update(UsersUpdateInput $input): User;
+
+    public function deleteById(int $id): void;
 }

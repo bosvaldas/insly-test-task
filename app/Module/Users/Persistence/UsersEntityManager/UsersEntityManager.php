@@ -43,4 +43,12 @@ class UsersEntityManager implements UsersEntityManagerInterface
 
         return $user;
     }
+
+    public function deleteById(int $id): void
+    {
+        $this->usersQueryContainer
+            ->queryById($id)
+            ->firstOrFail()
+            ->delete();
+    }
 }

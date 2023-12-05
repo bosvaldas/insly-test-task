@@ -41,10 +41,10 @@ class UserDetailsEntityManager implements UserDetailsEntityManagerInterface
         return $userDetail;
     }
 
-    public function deleteByUser(User $user): void
+    public function deleteByUserId(int $userId): void
     {
         $this->userDetailsQueryContainer
-            ->queryByUserId($user->id)
+            ->queryByUserId($userId)
             ->delete();
     }
 }
