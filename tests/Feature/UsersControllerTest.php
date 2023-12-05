@@ -23,7 +23,7 @@ class UsersControllerTest extends TestCase
         ];
 
         // Act
-        $response = $this->post('/api/users', $data);
+        $response = $this->postJson('/api/users', $data);
 
         // Assert - response contains the created user
         $response->assertCreated();
@@ -58,7 +58,7 @@ class UsersControllerTest extends TestCase
         ];
 
         // Act
-        $response = $this->post('/api/users', $data);
+        $response = $this->postJson('/api/users', $data);
 
         // Assert - response contains the created user
         $response->assertCreated();
@@ -88,4 +88,70 @@ class UsersControllerTest extends TestCase
         ]);
     }
 
+    /**
+     * @dataProvider failingValidationDataProvider
+     *
+     * @test
+     */
+    public function create_failsValidation(array $data): void
+    {
+        // Act
+        $response = $this->postJson('/api/users', $data);
+
+        // Assert
+        $response->assertUnprocessable();
+    }
+
+    public static function failingValidationDataProvider(): array
+    {
+        $validBody = [
+            'email' => 'foo@bar.baz',
+            'password' => 'secret123',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+        ];
+
+        $makeBodyWith = function (string $key, mixed $value) use ($validBody) {
+            $body = $validBody;
+            $body[$key] = $value;
+
+            return $body;
+        };
+
+        $makeBodyWithout = function (string $key) use ($validBody) {
+            $body = $validBody;
+            unset($body[$key]);
+
+            return $body;
+        };
+
+        $longString = str_repeat('a', 256);
+
+        return [
+            'empty request body' => [[]],
+
+            'missing email' => [$makeBodyWithout('email')],
+            'not string email' => [$makeBodyWith('email', 5)],
+            'invalid email' => [$makeBodyWith('email', 'test')],
+            'long email' => [$makeBodyWith('email', sprintf('%s@%s', $longString, 'test.com'))],
+
+            'missing password' => [$makeBodyWithout('password')],
+            'not string password' => [$makeBodyWith('password', 12345)],
+            'empty password' => [$makeBodyWith('password', '')],
+            'long password' => [$makeBodyWith('password', $longString)],
+
+            'missing first_name' => [$makeBodyWithout('first_name')],
+            'not string first_name' => [$makeBodyWith('first_name', 12345)],
+            'empty first_name' => [$makeBodyWith('first_name', '')],
+            'long first_name' => [$makeBodyWith('first_name', $longString)],
+
+            'missing last_name' => [$makeBodyWithout('last_name')],
+            'not string last_name' => [$makeBodyWith('last_name', 12345)],
+            'empty last_name' => [$makeBodyWith('last_name', '')],
+            'long last_name' => [$makeBodyWith('last_name', $longString)],
+
+            'not string address' => [$makeBodyWith('address', 12345)],
+            'long address' => [$makeBodyWith('address', $longString)],
+        ];
+    }
 }

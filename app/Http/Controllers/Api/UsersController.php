@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\UsersCreateRequest;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Http\JsonResponse;
@@ -11,7 +12,7 @@ use Illuminate\Http\Request;
 
 class UsersController
 {
-    public function create(Request $request): JsonResponse
+    public function create(UsersCreateRequest $request): JsonResponse
     {
         $user = new User();
         $user->email = $request->input('email');
