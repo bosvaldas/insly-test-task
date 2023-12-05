@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\ModuleLocator;
+use App\Module\Users\Communication\Providers\UsersServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -155,20 +157,16 @@ return [
     |
     */
 
-    'providers' => ServiceProvider::defaultProviders()->merge([
-        /*
-         * Package Service Providers...
-         */
+    'providers' => ServiceProvider::defaultProviders()
+        ->merge([
+            App\Providers\AuthServiceProvider::class,
+            App\Providers\EventServiceProvider::class,
+            App\Providers\RouteServiceProvider::class,
 
-        /*
-         * Application Service Providers...
-         */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-    ])->toArray(),
+            UsersServiceProvider::class,
+        ])
+        //->merge(ModuleLocator::discover('Communication/Providers/*.php'))
+        ->toArray(),
 
     /*
     |--------------------------------------------------------------------------
