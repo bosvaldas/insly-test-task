@@ -8,5 +8,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 
 interface UsersQueryContainerInterface
 {
+    public function create(): Builder;
+
     public function queryById(int $id): Builder;
 }

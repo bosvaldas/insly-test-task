@@ -9,7 +9,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class UsersQueryContainer implements UsersQueryContainerInterface
 {
-    private function create(): Builder
+    public function create(): Builder
     {
         return User::query();
     }
